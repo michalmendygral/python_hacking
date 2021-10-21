@@ -10,12 +10,19 @@ def scan(ip):
     #srp send_receive_packet returns answered and unanswered 
     scapy.srp(arp_request_broadcast)
     l_answered = scapy.srp(arp_request_broadcast, timeout=1, verbose= False)[0]
+    l_targets = []
+    
+    for answer in l_answered:
+        d_target = {"ip": answer[1].psrc, "mac": answer[1].hwsrc}
+        l_targets.append(d_target)
 
-    print('List of targets')
+    return l_targets
+
+def print_result(result_list):
     print('IP\t\tMAC\n-------------------------------------')
-    for i in l_answered:
-        print(i[1].psrc + '\t' + i[1].hwsrc)
-        print('-------------------------------------')
+    for client in result_list:
+        print(client["ip"] + "\t" + client["mac"])
+    print('-------------------------------------')
 
-
-scan("10.0.2.2/24")
+scan_result = scan("10.0.2.2/24")
+print_result(scan_result)
